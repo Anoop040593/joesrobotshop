@@ -1,8 +1,23 @@
+@let hasCartItems = cartItems().length > 0;
 <h1 class="header">Your Cart</h1>
+@if (hasCartItems) {
+  <button (click)="checkout.scrollIntoView({ behavior: 'smooth' })">
+    Proceed to Checkout!
+  </button>
+}
+<!--scrollIntoView() is not Angular Specific, Present in DOM elements and is a JS method-->
 <ul>
   @for (product of cartItems(); track product.id) {
-  <li>
-    <bot-cart-item [product]="product" />
-  </li>
+    <li>
+      <bot-cart-item [product]="product" />
+    </li>
+  } @empty {
+    <h2>You have no items in the cart!</h2>
   }
 </ul>
+<span #checkout>
+  @if (hasCartItems) {
+    <!--Here #checkout is a template reference variable-->
+    <button class="cta">Checkout</button>
+  }
+</span>

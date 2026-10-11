@@ -1,7 +1,12 @@
 <ul>
-  @for (product of products; track product.id) {
-  <li>
-    <bot-product-details [product]="product" />
-  </li>
+  @for (
+    product of products;
+    track product.id;
+    let idx = $index, count = $count, even = $even, odd = $odd, first = $first, last = $last
+  ) {
+    <li [class.alt]="odd" [class.top]="first">
+      <div>Index: {{ idx + 1 }} of {{ count }}</div>
+      <bot-product-details [product]="product" />
+    </li>
   }
 </ul>
