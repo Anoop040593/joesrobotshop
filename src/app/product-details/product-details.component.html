@@ -5,9 +5,8 @@
   <div>
     <h2>{{ p.name }}</h2>
     <p>{{ p.description }}</p>
-    <p>
-      Part Type:
-      @switch (p.category) {
+    <p>Part Type: {{ p.category | categoryToPartType: true }}</p>
+    <!-- @switch (p.category) {
         @case ("heads") {
           Head
         }
@@ -23,8 +22,7 @@
         @default {
           {{ p.category }}
         }
-      }
-    </p>
+      } -->
     @if (p.productNotes; as notes) {
       <!--notes is an alias-->
       <p>Product Notes: {{ notes }}</p>
@@ -32,15 +30,17 @@
     <p>
       Available Inventory: {{ availableInventory() }}
       <!--Control flow blocks-->
-      @if (availableInventory() === 1) {
-        <span class="pill red">Only One Left!</span>
-      } @else if (availableInventory() < 1) {
+      <!-- @if (availableInventory() === 1) { -->
+      <span class="pill red" [class.red]="availableInventory() < 5">{{
+        availableInventory() | i18nPlural: inventoryMap
+      }}</span>
+      <!-- } @else if (availableInventory() < 1) {
         <span class="pill red">Out of Stock!</span>
       } @else if (availableInventory() < 5) {
         <span class="pill yellow">Few Left!</span>
       } @else {
         <span class="pill">Get yours today!</span>
-      }
+      } -->
     </p>
   </div>
 </div>
