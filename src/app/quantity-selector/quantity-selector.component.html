@@ -1,0 +1,4 @@
+@let p = product();
+<button class="cta" (click)="incQuan(p)">+</button>
+<span>{{ inventoryService.getQ(p.id) }}</span>
+<button class="cta" (click)="decreaseQuan(p)">-</button>

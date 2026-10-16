@@ -11,9 +11,19 @@ export class InventoryService {
     },
     {} as Record<number, number>,
   );
+
+  private quantitiesFromProduct = allProducts.reduce(
+    (acc, product) => {
+      acc[product.id] = 0;
+      return acc;
+    },
+    {} as Record<number, number>,
+  );
   private allInventory = signal<Record<number, number>>(
     this.inventoryFromProducts,
   );
+
+  private quantity = signal<Record<number, number>>(this.quantitiesFromProduct);
 
   constructor() {}
 
@@ -27,5 +37,16 @@ export class InventoryService {
 
   increment(productId: number) {
     this.allInventory.update((i) => ({ ...i, [productId]: i[productId] + 1 }));
+  }
+  getQ(productId: number): number {
+    return this.quantity()[productId];
+  }
+
+  decQuantity(productId: number) {
+    this.quantity.update((i) => ({ ...i, [productId]: i[productId] - 1 }));
+  }
+
+  incQuantity(productId: number) {
+    this.quantity.update((i) => ({ ...i, [productId]: i[productId] + 1 }));
   }
 }

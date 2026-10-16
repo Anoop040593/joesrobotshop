@@ -5,10 +5,16 @@ import { CartService } from '../cart.service';
 import { CategoryToPartTypePipe } from '../category-to-part-type-pipe';
 import { SliderComponent } from '../slider/slider.component';
 import { InventoryService } from '../inventory.service';
+import { QuantitySelectorComponent } from '../quantity-selector/quantity-selector.component';
 
 @Component({
   selector: 'bot-product-details',
-  imports: [CommonModule, CategoryToPartTypePipe, SliderComponent],
+  imports: [
+    CommonModule,
+    CategoryToPartTypePipe,
+    SliderComponent,
+    QuantitySelectorComponent,
+  ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
 })

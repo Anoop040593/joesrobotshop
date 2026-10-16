@@ -12,11 +12,20 @@ export class CartService {
 
   addToCart(product: IProduct) {
     this.inventoryService.decrement(product.id);
-    this.cart.update((cart) => [...cart, product]);
+    if (this.cart().some((x) => x.id === product.id)) {
+      this.inventoryService.incQuantity(product.id);
+    } else {
+      this.cart.update((cart) => [...cart, product]);
+      this.inventoryService.incQuantity(product.id);
+    }
   }
 
   removeFromCart(product: IProduct) {
-    this.inventoryService.increment(product.id);
-    this.cart.update((cart) => cart.filter((p) => p.id != product.id));
+    if (this.cart().find((x) => x.id === product.id)) {
+      this.inventoryService.decQuantity(product.id);
+      this.inventoryService.increment(product.id);
+      if (this.inventoryService.getQ(product.id) === 0)
+        this.cart.update((cart) => cart.filter((p) => p.id != product.id));
+    }
   }
 }
