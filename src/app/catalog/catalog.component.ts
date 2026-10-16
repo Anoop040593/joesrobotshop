@@ -3,6 +3,7 @@ import { ProductDetailsComponent } from '../product-details/product-details.comp
 import { IProduct } from '../product.model';
 import allProducts from '../products.json';
 import { FilterByCategoryPipe } from '../filter-by-category-pipe';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'bot-catalog',
@@ -13,7 +14,7 @@ import { FilterByCategoryPipe } from '../filter-by-category-pipe';
 export class CatalogComponent {
   products: IProduct[] = allProducts;
   categoryFilter: string | null = null;
-
+  constructor(private cartService: CartService) {}
   addProduct() {
     this.products = [
       //this changes array ref, so now pipe will render upon change in UI, this is immutability
@@ -28,5 +29,9 @@ export class CatalogComponent {
         discount: 0,
       },
     ];
+  }
+
+  addToCart(product: IProduct) {
+    this.cartService.addToCart(product);
   }
 }

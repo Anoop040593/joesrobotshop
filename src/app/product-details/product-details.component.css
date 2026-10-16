@@ -26,12 +26,16 @@
   margin: 0;
 }
 
-button.cta {
+
+button.remove, button.cta {
   padding: 10px;
   width: 100px;
   display: block;
   margin: 10px auto;
 }
+
+
+
 
 .discount {
   margin-top: -15px;

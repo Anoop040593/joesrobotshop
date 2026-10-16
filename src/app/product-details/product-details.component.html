@@ -42,13 +42,25 @@
         <span class="pill">Get yours today!</span>
       } -->
     </p>
+    favorite Rating: {{ favorite() }}
+    <!--favorite is in child component, but changing that shows changes even in Parent component-->
+    <bot-slider
+      [(sliderValue)]="favorite"
+      (sliderValueChange)="handleSliderChange($event)"
+    />
   </div>
 </div>
 <div class="price">
-  <p [ngClass]="getPriceClasses()">{{ p.price | currency }}</p>
+  <p [ngClass]="getPriceClasses()">{{ p?.price | currency }}</p>
   @if (p.discount > 0) {
     <!--Control flow block-->
     <p>{{ discountedPrice }}</p>
   }
-  <button class="cta" (click)="addToCart()">Buy</button>
+  <!--This is enough in child component for content projection-->
+  <!-- <ng-content /> -->
+  @if (mode() === "shop") {
+    <button class="cta" (click)="add()">Buy</button>
+  } @else {
+    <button class="remove" (click)="remove()">Remove</button>
+  }
 </div>

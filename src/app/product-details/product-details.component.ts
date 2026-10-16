@@ -1,18 +1,31 @@
-import { Component, signal, input } from '@angular/core';
+import { Component, signal, input, output, computed } from '@angular/core';
 import { IProduct } from '../product.model';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../cart.service';
 import { CategoryToPartTypePipe } from '../category-to-part-type-pipe';
+import { SliderComponent } from '../slider/slider.component';
+import { InventoryService } from '../inventory.service';
 
 @Component({
   selector: 'bot-product-details',
-  imports: [CommonModule, CategoryToPartTypePipe],
+  imports: [CommonModule, CategoryToPartTypePipe, SliderComponent],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
 })
 export class ProductDetailsComponent {
-  product = input<any>();
-  availableInventory = signal(5);
+  constructor(private inventoryService: InventoryService) {}
+  //input property, making it accessible to parent components.
+  // Also, input.required makes it compulsory for the parent comp to use the product object, It also solves the "possibly undefined" error
+  mode = input<'shop' | 'cart'>('shop');
+  product = input.required<IProduct, IProduct>({
+    transform: this.normalizeDiscount,
+  });
+  addToCart = output<IProduct>();
+  removeFromCart = output<IProduct>();
+  availableInventory = computed(() =>
+    this.inventoryService.get(this.product().id),
+  );
+  favorite = signal(3);
   inventoryMap = {
     '=0': 'Out of Stock!',
     '=1': 'Only one left!',
@@ -22,18 +35,29 @@ export class ProductDetailsComponent {
     other: 'Get yours today!',
   };
 
-  constructor(private cartService: CartService) {}
-
   getImageUrl(product: IProduct) {
     return '/images/robot-parts/' + product.imageName;
   }
 
-  addToCart() {
-    this.availableInventory.update((p) => p - 1);
-    this.cartService.addToCart(this.product());
+  add() {
+    this.addToCart.emit(this.product());
+  }
+
+  remove() {
+    this.removeFromCart.emit(this.product());
+  }
+  handleSliderChange(newValue: number) {
+    console.log('New Slider Value: ', newValue);
   }
 
   getPriceClasses() {
     return { strikethrough: this.product().discount > 0 };
+  }
+
+  normalizeDiscount(product: IProduct): IProduct {
+    if (product.discount < 1) return product;
+    else {
+      return { ...product, discount: product.discount / 100 };
+    }
   }
 }

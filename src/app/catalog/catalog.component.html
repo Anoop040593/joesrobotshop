@@ -14,7 +14,14 @@
   ) {
     <li [class.alt]="odd" [class.top]="first">
       <div>Index: {{ idx + 1 }} of {{ count }}</div>
-      <bot-product-details [product]="product" />
+      <bot-product-details
+        mode="shop"
+        (addToCart)="addToCart($event)"
+        [product]="product"
+      />
+      <!-- <button class="cta" (click)="addToCart(product)">Buy</button> -->
+      <!--This will generate child components buy button into the parent component via content projection-->
+      <!-- </bot-product-details> -->
     </li>
   }
 </ul>
